@@ -9,7 +9,7 @@ const SECRETJWT = config.SECRETJWT
 export const register = async (req, res) => {
     const { username, email, password } = req.body
 
-    if (!username, !email, !password) return res.status(400).send({ error: "Datos incompletos" })
+    if (!username, !email, !password) return res.status(400).send([ "Datos incompletos" ])
 
     try {
 
@@ -42,22 +42,22 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
     const { email, password } = req.body
 
-    if (!email || !password) return res.status(400).json({ error: "datos incompletos" })
+    if (!email || !password) return res.status(400).json([ "datos incompletos" ])
 
     try {
 
         const userFound = await User.findOne({ email })
-        if (!userFound) return res.status(400).send(["Email no registrado"])
+        if (!userFound) return res.status(400).json(["Email no registrado"])
 
         const isMatch = await bcrypt.compare(password, userFound.password)
-        if (!isMatch) return res.status(400).send(["contraseña incorrecta"])
+        if (!isMatch) return res.status(400).json(["contraseña incorrecta"])
 
 
         const token = await createAccessToken(userFound._id)
 
         res.cookie('token', token)
-        res.send({ status: "success", message: "login correcto", payload: token })
-        console.log(token)
+        res.status(200).send({ status: "success", message: "login correcto", payload: token })
+        // console.log(token)
 
     } catch (error) {
         console.log(error)
