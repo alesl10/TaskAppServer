@@ -9,6 +9,8 @@ const SECRETJWT = config.SECRETJWT
 export const register = async (req, res) => {
     const { username, email, password } = req.body
 
+    if (!username, !email, !password) return res.status(400).send({ error: "Datos incompletos" })
+
     try {
 
         const mailFound = await User.findOne({ email })
@@ -39,6 +41,8 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
     const { email, password } = req.body
+
+    if (!email || !password) return res.status(400).json({ error: "datos incompletos" })
 
     try {
 
